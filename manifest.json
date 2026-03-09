@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "PomoBlock",
+  "version": "1.0",
+  "description": "포모도로 타이머로 도파민 사이트를 차단하며 몰입해보세요",
+  "permissions": [
+    "storage",
+    "alarms",
+    "declarativeNetRequest",
+    "notifications"
+  ],
+"host_permissions": [
+    "*://*.youtube.com/*",
+    "*://*.instagram.com/*",
+    "http://*/*",
+    "https://*/*"
+  ],
+
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "options_page": "options/options.html",
+  "background": {
+    "service_worker": "background/background.js"
+  }
+}

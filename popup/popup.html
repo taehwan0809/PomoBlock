@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>PomoBlock</h1>
+        <button id="settingsBtn" title="설정">⚙️</button>
+      </header>
+
+      <div class="timer-container">
+        <svg class="progress-ring" width="160" height="160">
+          <circle
+            class="progress-ring__circle-bg"
+            stroke="#eee"
+            stroke-width="8"
+            fill="transparent"
+            r="70"
+            cx="80"
+            cy="80"
+          />
+          <circle
+            id="progressCircle"
+            class="progress-ring__circle"
+            stroke="#ff5252"
+            stroke-width="8"
+            fill="transparent"
+            r="70"
+            cx="80"
+            cy="80"
+          />
+        </svg>
+        <div id="timerDisplay">25:00</div>
+      </div>
+
+      <div class="status-info">
+        <span id="modeStatus">집중 모드</span>
+        <div id="setCounter" class="dots"></div>
+      </div>
+
+      <div class="controls">
+        <button id="startBtn" class="primary-btn">포모도로 타이머 시작</button>
+        <button id="stopBtn" class="secondary-btn hidden">그만하기</button>
+      </div>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>

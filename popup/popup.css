@@ -1,0 +1,112 @@
+:root {
+  --focus-color: #ff5252;
+  --rest-color: #4caf50;
+  --bg-color: #ffffff;
+  --text-color: #333;
+}
+
+body {
+  width: 250px;
+  font-family: "Pretendard", sans-serif;
+  margin: 0;
+  padding: 15px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+h1 {
+  font-size: 18px;
+  margin: 0;
+}
+#settingsBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.timer-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+#timerDisplay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 32px;
+  font-weight: bold;
+}
+
+/* 원형 프로그레스 바 애니메이션 */
+.progress-ring__circle {
+  transition: stroke-dashoffset 0.35s;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  stroke-dasharray: 440; /* 2 * PI * r(70) */
+  stroke-dashoffset: 0;
+}
+
+.status-info {
+  text-align: center;
+  margin-bottom: 20px;
+}
+#modeStatus {
+  font-weight: bold;
+  color: var(--focus-color);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.dots {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ddd;
+}
+.dot.active {
+  background: var(--focus-color);
+}
+
+.controls {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+}
+button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.primary-btn {
+  background: var(--focus-color);
+  color: white;
+}
+.secondary-btn {
+  background: #f0f0f0;
+  color: #666;
+}
+.hidden {
+  display: none;
+}
