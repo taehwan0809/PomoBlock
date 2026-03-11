@@ -1,63 +1,106 @@
-// 기본값 설정
 const DEFAULT_SETTINGS = {
-    focusTime: 25,
-    restTime: 5,
-    totalSets: 4,
-    blacklist: ['youtube.com', 'instagram.com', 'facebook.com']
+  focusTime: 25,
+  restTime: 5,
+  totalSets: 4,
+  blacklist: ["youtube.com", "instagram.com", "facebook.com"],
 };
 
-// 페이지 로드 시 저장된 설정 불러오기
-document.addEventListener('DOMContentLoaded', () => {
-    chrome.storage.sync.get(DEFAULT_SETTINGS, (items) => {
-        document.getElementById('focusTime').value = items.focusTime;
-        document.getElementById('restTime').value = items.restTime;
-        document.getElementById('totalSets').value = items.totalSets;
-        renderSiteList(items.blacklist);
-    });
-});
+let currentBlacklist = [...DEFAULT_SETTINGS.blacklist];
 
-// 사이트 리스트 렌더링 함수
-function renderSiteList(sites) {
-    const list = document.getElementById('siteList');
-    list.innerHTML = '';
-    sites.forEach((site, index) => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-        <span>${site}</span>
-        <button class="delete-btn" data-index="${index}">삭제</button>
-    `;
-        list.appendChild(li);
-    });
+function normalizeDomain(input) {
+  if (!input) {
+    return "";
+  }
+
+  let value = String(input).trim().toLowerCase();
+  value = value.replace(/^https?:\/\//, "");
+  value = value.replace(/^www\./, "");
+  value = value.split("/")[0];
+  value = value.split("?")[0];
+  value = value.split("#")[0];
+  value = value.replace(/:\d+$/, "");
+
+  return value;
 }
 
-// 사이트 추가 버튼 이벤트
-document.getElementById('addSiteBtn').addEventListener('click', () => {
-    const newSite = document.getElementById('newSite').value.trim();
-    if (newSite) {
-        // 기존 목록을 먼저 가져온 뒤 새 사이트 추가
-        chrome.storage.sync.get({ blacklist: ['youtube.com', 'instagram.com', 'facebook.com'] }, (items) => {
-            if (!items.blacklist.includes(newSite)) {
-                const updatedList = [...items.blacklist, newSite];
-                chrome.storage.sync.set({ blacklist: updatedList }, () => {
-                    renderSiteList(updatedList);
-                    document.getElementById('newSite').value = '';
-                });
-            }
-        });
-    }
+function renderSiteList(sites) {
+  const list = document.getElementById("siteList");
+  list.innerHTML = "";
+
+  sites.forEach((site, index) => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <span>${site}</span>
+      <button class="delete-btn" data-index="${index}">삭제</button>
+    `;
+    list.appendChild(li);
+  });
+}
+
+function showStatus(message) {
+  const status = document.getElementById("statusMsg");
+  status.textContent = message;
+  setTimeout(() => {
+    status.textContent = "";
+  }, 2000);
+}
+
+async function loadSettings() {
+  const items = await chrome.storage.sync.get(DEFAULT_SETTINGS);
+  currentBlacklist = Array.isArray(items.blacklist) ? [...items.blacklist] : [...DEFAULT_SETTINGS.blacklist];
+
+  document.getElementById("focusTime").value = items.focusTime;
+  document.getElementById("restTime").value = items.restTime;
+  document.getElementById("totalSets").value = items.totalSets;
+  renderSiteList(currentBlacklist);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadSettings().catch(console.error);
 });
 
-// 설정 최종 저장
-document.getElementById('saveBtn').addEventListener('click', () => {
-    const settings = {
-        focusTime: parseInt(document.getElementById('focusTime').value),
-        restTime: parseInt(document.getElementById('restTime').value),
-        totalSets: parseInt(document.getElementById('totalSets').value)
-    };
+document.getElementById("addSiteBtn").addEventListener("click", async () => {
+  const input = document.getElementById("newSite");
+  const newSite = normalizeDomain(input.value);
 
-    chrome.storage.sync.set(settings, () => {
-        const status = document.getElementById('statusMsg');
-        status.textContent = '설정이 저장되었습니다!';
-        setTimeout(() => { status.textContent = ''; }, 2000);
-    });
+  if (!newSite) {
+    return;
+  }
+
+  const mergedList = [...currentBlacklist];
+  if (!mergedList.includes(newSite)) {
+    mergedList.push(newSite);
+  }
+
+  currentBlacklist = mergedList;
+  await chrome.storage.sync.set({ blacklist: currentBlacklist });
+  renderSiteList(currentBlacklist);
+  input.value = "";
+});
+
+document.getElementById("siteList").addEventListener("click", async (event) => {
+  const button = event.target.closest(".delete-btn");
+  if (!button) {
+    return;
+  }
+
+  const index = Number(button.dataset.index);
+  if (Number.isNaN(index)) {
+    return;
+  }
+
+  currentBlacklist = currentBlacklist.filter((_, itemIndex) => itemIndex !== index);
+  await chrome.storage.sync.set({ blacklist: currentBlacklist });
+  renderSiteList(currentBlacklist);
+});
+
+document.getElementById("saveBtn").addEventListener("click", async () => {
+  const settings = {
+    focusTime: parseInt(document.getElementById("focusTime").value, 10),
+    restTime: parseInt(document.getElementById("restTime").value, 10),
+    totalSets: parseInt(document.getElementById("totalSets").value, 10),
+  };
+
+  await chrome.storage.sync.set(settings);
+  showStatus("설정이 저장되었습니다.");
 });

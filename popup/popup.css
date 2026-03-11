@@ -14,6 +14,10 @@ body {
   color: var(--text-color);
 }
 
+body.loading {
+  visibility: hidden;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -84,6 +88,15 @@ h1 {
 }
 .dot.active {
   background: var(--focus-color);
+}
+
+.dot.current {
+  background: transparent;
+  border: 2px solid var(--focus-color);
+}
+
+.dot.pending {
+  background: #ddd;
 }
 
 .controls {

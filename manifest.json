@@ -7,15 +7,18 @@
     "storage",
     "alarms",
     "declarativeNetRequest",
-    "notifications"
+    "notifications",
+    "offscreen"
   ],
-"host_permissions": [
+  "host_permissions": [
     "*://*.youtube.com/*",
+    "*://youtu.be/*",
+    "*://*.youtube-nocookie.com/*",
     "*://*.instagram.com/*",
+    "*://*.facebook.com/*",
     "http://*/*",
     "https://*/*"
   ],
-
   "action": {
     "default_popup": "popup/popup.html",
     "default_icon": {
@@ -32,5 +35,15 @@
   "options_page": "options/options.html",
   "background": {
     "service_worker": "background/background.js"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "pages/blocked.html",
+        "pages/blocked.css",
+        "pages/blocked.js"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
