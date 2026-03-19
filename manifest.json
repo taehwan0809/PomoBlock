@@ -1,11 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "PomoBlock",
-  "version": "1.0",
+  "name": "PomoShield",
+  "version": "1.0.2",
   "description": "포모도로 타이머로 도파민 사이트를 차단하며 몰입해보세요",
   "permissions": [
     "storage",
-    "alarms",
     "declarativeNetRequest",
     "notifications",
     "offscreen"
