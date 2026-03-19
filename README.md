@@ -1,4 +1,4 @@
-# 🍎 PomoBlock (v1.1) 🛡️
+# 🍎 PomoShield (v1.1) 🛡️
 
 > **"Master Your Focus with Smart Site Blocking."**
 > A Chrome Extension that combines a Pomodoro timer with a site blocker to help you stay productive.
